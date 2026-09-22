@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Moon, Plane, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,11 +22,11 @@ const AuthLinks = [
 
 function Navbar() {
   const { theme, setTheme } = useContext(ThemeContext);
-  console.log(theme);
-
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     theme === "light" ? setTheme("dark") : setTheme("light");
-  };
+    console.log(theme);
+  }, [theme]);
+
   return (
     <div className="w-full bg-primary sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
