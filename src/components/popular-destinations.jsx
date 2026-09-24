@@ -5,57 +5,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import "swiper/css";
-
-const DESTINATIONS = [
-  {
-    name: "Santorini",
-    country: "Greece",
-    price: 890,
-    rating: 4.9,
-    image:
-      "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=700&auto=format&fit=crop&q=70",
-  },
-  {
-    name: "Kyoto",
-    country: "Japan",
-    price: 1240,
-    rating: 4.8,
-    image:
-      "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=700&auto=format&fit=crop&q=70",
-  },
-  {
-    name: "Ubud",
-    country: "Bali, Indonesia",
-    price: 760,
-    rating: 4.7,
-    image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=700&auto=format&fit=crop&q=70",
-  },
-  {
-    name: "Torres del Paine",
-    country: "Patagonia, Chile",
-    price: 1580,
-    rating: 4.9,
-    image:
-      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=700&auto=format&fit=crop&q=70",
-  },
-  {
-    name: "Marrakech",
-    country: "Morocco",
-    price: 690,
-    rating: 4.6,
-    image:
-      "https://images.unsplash.com/photo-1553603227-2358aabe821e?w=700&auto=format&fit=crop&q=70",
-  },
-  {
-    name: "Queenstown",
-    country: "New Zealand",
-    price: 1390,
-    rating: 4.8,
-    image:
-      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=700&auto=format&fit=crop&q=70",
-  },
-];
+import { DESTINATIONS } from "../data/data";
 
 function DestinationCard({ d }) {
   return (
