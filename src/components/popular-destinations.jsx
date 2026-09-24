@@ -9,10 +9,7 @@ import { DESTINATIONS } from "../data/data";
 
 function DestinationCard({ d }) {
   return (
-    <Link
-      to={`/destinations/${d.name.toLowerCase().replace(/\s+/g, "-")}`}
-      className="group block"
-    >
+    <Link to={`/destinations/${d.id}`} className="group block">
       <div className="relative aspect-[3/4] rounded-2xl overflow-hidden">
         <img
           src={d.image}
