@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import { useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Moon, Plane, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { ThemeContext } from "../providers/themeProvider";
+import CartSheet from "./cart-sheet";
 
 const Links = [
   { name: "Blogs", url: "/blogs" },
@@ -24,13 +25,11 @@ function Navbar() {
   const { theme, setTheme } = useContext(ThemeContext);
   const toggleTheme = useCallback(() => {
     theme === "light" ? setTheme("dark") : setTheme("light");
-    console.log(theme);
   }, [theme]);
 
   return (
     <div className="w-full bg-primary sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
-        {/* Logo */}
         <Link
           to="/"
           className="flex items-center gap-2 font-extrabold text-2xl text-white"
@@ -39,7 +38,6 @@ function Navbar() {
           Travelo
         </Link>
 
-        {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-8">
           {Links.map((link) => (
             <li key={link.url}>
@@ -53,8 +51,8 @@ function Navbar() {
           ))}
         </ul>
 
-        {/* Desktop auth buttons */}
         <div className="hidden md:flex items-center gap-3">
+          <CartSheet />
           <Button onClick={toggleTheme}>
             {theme === "light" ? <Moon /> : <Sun />}
           </Button>
@@ -71,8 +69,8 @@ function Navbar() {
           </Button>
         </div>
 
-        {/* Mobile menu */}
-        <div className="md:hidden ">
+        <div className="md:hidden flex items-center gap-2">
+          <CartSheet />
           <Sheet>
             <SheetTrigger asChild>
               <Button

@@ -3,14 +3,16 @@ import { useParams } from "react-router-dom";
 import { DESTINATIONS } from "../../data/data";
 import { Calendar, Star } from "lucide-react";
 import { Button } from "../ui/button";
+import { useDispatch } from "react-redux";
 
 function DestinationById() {
   const { id } = useParams();
   const dest = DESTINATIONS.find((d) => d.id === id);
 
+  const dispatch = useDispatch();
+
   const handleAddToCart = () => {
-    console.log(`Added ${dest.name} to cart`);
-    // TODO: wire up actual cart logic
+    dispatch(handleAddToCart({ id: dest.id }));
   };
 
   if (!dest) {
