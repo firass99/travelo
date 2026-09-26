@@ -1,5 +1,7 @@
+// cart-sheet.jsx
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,12 +12,30 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { removeFromCart, updateQuantity } from "../store/slices/cartSlice";
+import CartItems from "./cart-items";
+//import cartItems from "./cart-items";
 
 function CartSheet() {
   const cart = useSelector((state) => state.cart.cart);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const itemCount = cart.reduce((count, item) => count + item.qte, 0);
   const dispatch = useDispatch();
+
+  // Stable references across renders — required for React.memo on CartItem to actually help
+  const handleIncrement = useCallback(
+    (id, qte) => dispatch(updateQuantity({ id, qte: qte + 1 })),
+    [dispatch],
+  );
+
+  const handleDecrement = useCallback(
+    (id, qte) => dispatch(updateQuantity({ id, qte: qte - 1 })),
+    [dispatch],
+  );
+
+  const handleRemove = useCallback(
+    (id) => dispatch(removeFromCart({ id })),
+    [dispatch],
+  );
 
   return (
     <Sheet>
@@ -52,61 +72,13 @@ function CartSheet() {
         ) : (
           <div className="flex-1 overflow-y-auto flex flex-col gap-4 mt-4">
             {cart.map((item) => (
-              <div
+              <CartItems
                 key={item.id}
-                className="flex gap-3 border-b border-border pb-4"
-              >
-                <img
-                  src={item.image}
-                  alt={`${item.name}, ${item.country}`}
-                  className="h-16 w-16 rounded-lg object-cover shrink-0"
-                />
-
-                <div className="flex flex-1 flex-col gap-1">
-                  <p className="font-semibold text-sm">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {item.country}
-                  </p>
-                  <p className="text-sm font-bold">${item.price}</p>
-
-                  <div className="flex items-center gap-2 mt-1">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({ id: item.id, qte: item.qte - 1 }),
-                        )
-                      }
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <span className="text-sm w-4 text-center">{item.qte}</span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({ id: item.id, qte: item.qte + 1 }),
-                        )
-                      }
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 ml-auto text-destructive hover:text-destructive"
-                      onClick={() => dispatch(removeFromCart({ id: item.id }))}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                item={item}
+                onIncrement={handleIncrement}
+                onDecrement={handleDecrement}
+                onRemove={handleRemove}
+              />
             ))}
           </div>
         )}

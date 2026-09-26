@@ -13,9 +13,11 @@ function ThemeTogglerButton() {
     root.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
+  // import the function from the slice
+  const handleToggle = () => dispatch(toggleTheme());
 
   return (
-    <Button onClick={() => dispatch(toggleTheme())}>
+    <Button onClick={handleToggle}>
       {theme === "dark" ? <Moon /> : <Sun />}
     </Button>
   );
