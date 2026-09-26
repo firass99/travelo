@@ -3,6 +3,8 @@ const initialState = {
   totalPrice: 0,
 };
 
+//
+
 const recalcTotal = (state) => {
   state.totalPrice = state.cart.reduce(
     (total, item) => total + item.price * item.qte,
@@ -15,7 +17,8 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const destId = action.payload.id;
+      //action we used it to extract action payload then we set the state
+      const destId = action.payload.id; //action pour extracter, state pour enregistrer
       const existing = state.cart.find((item) => item.id === destId);
 
       if (existing) {

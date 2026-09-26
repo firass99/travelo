@@ -12,11 +12,9 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ErrorBoundary message="Something went wrong loading the app.">
-        <ToggleThemeProvider>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </ToggleThemeProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
       </ErrorBoundary>
     </BrowserRouter>
   </StrictMode>,

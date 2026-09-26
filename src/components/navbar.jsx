@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/sheet";
 import { ThemeContext } from "../providers/themeProvider";
 import CartSheet from "./cart-sheet";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../store/slices/themeSlice";
 
 const Links = [
   { name: "Blogs", url: "/blogs" },
@@ -22,11 +24,13 @@ const AuthLinks = [
 ];
 
 function Navbar() {
-  const { theme, setTheme } = useContext(ThemeContext);
-  const toggleTheme = useCallback(() => {
+  //const { theme, setTheme } = useContext(ThemeContext);
+  const isLight = useSelector((state) => state.theme.light);
+  const dispatch = useDispatch();
+  /*   const toggleTheme = useCallback(() => {
     theme === "light" ? setTheme("dark") : setTheme("light");
   }, [theme]);
-
+ */
   return (
     <div className="w-full bg-primary sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
@@ -53,8 +57,8 @@ function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <CartSheet />
-          <Button onClick={toggleTheme}>
-            {theme === "light" ? <Moon /> : <Sun />}
+          <Button onClick={() => dispatch(toggleTheme)}>
+            {isLight ? <Moon /> : <Sun />}
           </Button>
           <Button
             size="lg"

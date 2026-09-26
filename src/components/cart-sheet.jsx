@@ -14,10 +14,10 @@ import {
 import { removeFromCart, updateQuantity } from "../store/slices/cartSlice";
 
 function CartSheet() {
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const itemCount = cart.reduce((count, item) => count + item.qte, 0);
+  const dispatch = useDispatch();
 
   return (
     <Sheet>
