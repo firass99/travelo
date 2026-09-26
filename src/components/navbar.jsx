@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Moon, Plane, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,10 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
-import { ThemeContext } from "../providers/themeProvider";
 import CartSheet from "./cart-sheet";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../store/slices/themeSlice";
+import ThemeTogglerButton from "./theme-toggler-btn";
 
 const Links = [
   { name: "Blogs", url: "/blogs" },
@@ -24,13 +24,9 @@ const AuthLinks = [
 ];
 
 function Navbar() {
-  //const { theme, setTheme } = useContext(ThemeContext);
-  const isLight = useSelector((state) => state.theme.light);
+  const theme = useSelector((state) => state.theme.theme);
   const dispatch = useDispatch();
-  /*   const toggleTheme = useCallback(() => {
-    theme === "light" ? setTheme("dark") : setTheme("light");
-  }, [theme]);
- */
+
   return (
     <div className="w-full bg-primary sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
@@ -57,34 +53,43 @@ function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <CartSheet />
-          <Button onClick={() => dispatch(toggleTheme)}>
-            {isLight ? <Moon /> : <Sun />}
+          <ThemeTogglerButton />
+
+          {/* Fixed: render prop instead of asChild */}
+          <Button
+            size="lg"
+            variant="ghost"
+            className="text-white hover:bg-white/10 hover:text-white"
+            render={<Link to="/login" />}
+            nativeButton={false}
+          >
+            Login
           </Button>
           <Button
             size="lg"
-            asChild
-            variant="ghost"
-            className="text-white hover:bg-white/10 hover:text-white"
+            variant="secondary"
+            render={<Link to="/register" />}
+            nativeButton={false}
           >
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button asChild size="lg" variant="secondary">
-            <Link to="/register">Register</Link>
+            Register
           </Button>
         </div>
 
         <div className="md:hidden flex items-center gap-2">
           <CartSheet />
           <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/10 hover:text-white"
-              >
-                <Menu className="h-6 w-6" />
-              </Button>
+            <SheetTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/10 hover:text-white"
+                />
+              }
+            >
+              <Menu className="h-6 w-6" />
             </SheetTrigger>
+
             <SheetContent side="right" className="w-[280px] px-4">
               <div className="flex flex-col gap-6 mt-8">
                 <Link
@@ -98,13 +103,10 @@ function Navbar() {
                 <ul className="flex flex-col gap-4">
                   {Links.map((link) => (
                     <li key={link.url}>
-                      <SheetClose asChild>
-                        <Link
-                          to={link.url}
-                          className="text-base font-semibold hover:text-primary transition-colors"
-                        >
+                      <SheetClose render={<Link to={link.url} />}>
+                        <span className="text-base font-semibold hover:text-primary transition-colors">
                           {link.name}
-                        </Link>
+                        </span>
                       </SheetClose>
                     </li>
                   ))}
@@ -112,13 +114,18 @@ function Navbar() {
 
                 <div className="flex flex-col gap-3 mt-4 border-t pt-4">
                   {AuthLinks.map((link) => (
-                    <SheetClose asChild key={link.url}>
-                      <Button
-                        asChild
-                        variant={link.name === "Login" ? "outline" : "default"}
-                      >
-                        <Link to={link.url}>{link.name}</Link>
-                      </Button>
+                    <SheetClose
+                      key={link.url}
+                      render={
+                        <Button
+                          variant={
+                            link.name === "Login" ? "outline" : "default"
+                          }
+                          render={<Link to={link.url} />}
+                        />
+                      }
+                    >
+                      {link.name}
                     </SheetClose>
                   ))}
                 </div>

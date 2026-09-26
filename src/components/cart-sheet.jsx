@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import {
   SheetTitle,
   SheetFooter,
 } from "@/components/ui/sheet";
-//import { removeFromCart, updateQuantity } from "../features/cart/cartSlice";
 import { removeFromCart, updateQuantity } from "../store/slices/cartSlice";
 
 function CartSheet() {
@@ -21,22 +19,28 @@ function CartSheet() {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative text-white hover:bg-white/10 hover:text-white"
-        >
-          <ShoppingCart className="h-5 w-5" />
-          {itemCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accent-foreground">
-              {itemCount}
-            </span>
-          )}
-        </Button>
+      <SheetTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative text-white hover:bg-white/10 hover:text-white"
+          />
+        }
+      >
+        <ShoppingCart className="h-5 w-5" />
+        {itemCount > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accent-foreground">
+            {itemCount}
+          </span>
+        )}
       </SheetTrigger>
 
-      <SheetContent side="right" className="w-[380px] px-4 flex flex-col">
+      <SheetContent
+        side="right"
+        className="w-[380px] px-4 flex flex-col"
+        showCloseButton={false}
+      >
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>

@@ -4,6 +4,7 @@ import { DESTINATIONS } from "../../data/data";
 import { Calendar, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/slices/cartSlice";
 
 function DestinationById() {
   const { id } = useParams();
@@ -12,9 +13,8 @@ function DestinationById() {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
-    dispatch(handleAddToCart({ id: dest.id }));
+    dispatch(addToCart({ id: dest.id }));
   };
-
   if (!dest) {
     return (
       <div className="container py-24 text-center">
@@ -62,7 +62,7 @@ function DestinationById() {
           <p className="font-bold text-xl">Price : {dest.price} $</p>
           <Button
             className="px-14 py-6 text-md font-bold"
-            onClick={handleAddToCart}
+            onClick={() => dispatch(addToCart({ id: dest.id }))}
           >
             Add to Cart
           </Button>
