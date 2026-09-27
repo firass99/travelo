@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function BlogsPage() {
-  return (
-    <div>BlogsPage</div>
-  )
+  return <div>Blogs Page user</div>;
 }
 
-export default BlogsPage
+export default BlogsPage;

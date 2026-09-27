@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, Moon, Plane, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import CartSheet from "./cart-sheet";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../store/slices/themeSlice";
 import ThemeTogglerButton from "./theme-toggler-btn";
+import { deleteAuth } from "../store/slices/authSlice";
 
 const Links = [
   { name: "Blogs", url: "/blogs" },
@@ -25,7 +26,16 @@ const AuthLinks = [
 
 function Navbar() {
   const theme = useSelector((state) => state.theme.theme);
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("email", null);
+    localStorage.removeItem("role", null);
+    dispatch(deleteAuth());
+    navigate("/");
+  };
 
   return (
     <div className="w-full bg-primary sticky top-0 z-50 shadow-sm">
@@ -35,7 +45,7 @@ function Navbar() {
           className="flex items-center gap-2 font-extrabold text-2xl text-white"
         >
           <Plane className="h-6 w-6" />
-          Travelo
+          Travelo <p className="text-sm">{auth.email}</p>
         </Link>
 
         <ul className="hidden md:flex items-center gap-8">
@@ -56,23 +66,40 @@ function Navbar() {
           <ThemeTogglerButton />
 
           {/* Fixed: render prop instead of asChild */}
-          <Button
-            size="lg"
-            variant="ghost"
-            className="text-white hover:bg-white/10 hover:text-white"
-            render={<Link to="/login" />}
-            nativeButton={false}
-          >
-            Login
-          </Button>
-          <Button
-            size="lg"
-            variant="secondary"
-            render={<Link to="/register" />}
-            nativeButton={false}
-          >
-            Register
-          </Button>
+
+          {auth.isAuth ? (
+            <>
+              <Button
+                size="lg"
+                variant="ghost"
+                className="text-white hover:bg-white/10 hover:text-white"
+                onClick={handleLogout}
+                nativeButton={false}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                size="lg"
+                variant="ghost"
+                className="text-white hover:bg-white/10 hover:text-white"
+                render={<Link to="/login" />}
+                nativeButton={false}
+              >
+                Login
+              </Button>
+              <Button
+                size="lg"
+                variant="secondary"
+                render={<Link to="/register" />}
+                nativeButton={false}
+              >
+                Register
+              </Button>
+            </>
+          )}
         </div>
 
         <div className="md:hidden flex items-center gap-2">

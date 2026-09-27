@@ -85,3 +85,8 @@ export const TYPES = [
   { value: "flights", label: "Flights", icon: Plane },
   { value: "stays", label: "Stays", icon: Hotel },
 ];
+
+export const USERS = [
+  { email: "user@gmail.com", password: "User2026", role: "USER" },
+  { email: "admin@gmail.com", password: "Admin2026", role: "ADMIN" },
+];

@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { promise, z } from "zod";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { USERS } from "../../data/data";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../../store/slices/authSlice";
 
 const loginSchema = z.object({
   email: z
@@ -26,6 +28,7 @@ function LoginPage() {
     handleSubmit, //<form onSubmit={handleSubmit(function)}>
     watch, // to trach inputs value const x =watch(x, '')
     reset,
+    setError,
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm({
     resolver: zodResolver(loginSchema), //connect zoh+ RHF
@@ -33,12 +36,47 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
   const onSubmit = async (data) => {
+    try {
+      const user = await USERS.find(
+        (u) => u.email === data.email && u.password === data.password,
+      );
+
+      if (!user) {
+        setError("root", {
+          type: "manual",
+          message: "Invalid email or password.",
+        });
+        return;
+      }
+      //dispatch("setAuth", { isAuth: true, email: user.email, role: user.role });
+      dispatch(setAuth({ isAuth: true, email: user.email, role: user.role }));
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("role", user.role);
+      if (user.role === "ADMIN") {
+        navigate("/contact");
+      } else if (user.role === "USER") {
+        navigate("/blogs");
+      } else {
+        navigate("/");
+      }
+
+      reset();
+    } catch (err) {
+      console.error(err);
+      setError("root", {
+        type: "manual",
+        message: "Something went wrong. Please try again.",
+      });
+    }
+
     // data send by RHF
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    // await new Promise((resolve) => setTimeout(resolve, 1200));
     console.log("Registred : ", data);
     // TODO: call your login API / dispatch auth action here
-    isSubmitted ? navigate("/destinations") : reset();
+    // isSubmitted ? navigate("/destinations") : reset();
   };
 
   return (
@@ -48,6 +86,12 @@ function LoginPage() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col space-y-6 w-full max-w-sm mx-auto"
         >
+          {" "}
+          {errors.root && (
+            <p className="text-sm text-red-500 text-center">
+              {errors.root.message}
+            </p>
+          )}
           <div id="email-group" className="flex flex-col gap-1.5">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -60,7 +104,6 @@ function LoginPage() {
               <span className="text-red-500">{errors.email.message}</span>
             )}
           </div>
-
           <div id="password-group" className="flex flex-col gap-1.5">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -73,7 +116,6 @@ function LoginPage() {
               <span className="text-red-500">{errors.password.message}</span>
             )}
           </div>
-
           <div id="button-group" className="flex justify-around gap-2">
             <Button
               type="button"
