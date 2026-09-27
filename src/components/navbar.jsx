@@ -45,7 +45,7 @@ function Navbar() {
           className="flex items-center gap-2 font-extrabold text-2xl text-white"
         >
           <Plane className="h-6 w-6" />
-          Travelo <p className="text-sm">{auth.email}</p>
+          Travelo {auth.isAuth ? <p className="text-sm">{auth.role}</p> : ""}
         </Link>
 
         <ul className="hidden md:flex items-center gap-8">
