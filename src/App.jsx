@@ -4,6 +4,7 @@ import ContactPage from "@/components/pages/contact";
 import HomePage from "@/components/pages/home";
 import LoginPage from "@/components/pages/login";
 import RegisterPage from "@/components/pages/register";
+import HowItWorksPage from "@/components/pages/how-it-works";
 import { Route, Routes } from "react-router-dom";
 import Destinations from "@/components/pages/destinations";
 import DestinationById from "./components/pages/destinations-by-id";
@@ -23,6 +24,8 @@ function App() {
             <Route index element={<BlogsPage />} />
             <Route path=":id" element={<BlogsById />} />
           </Route>
+
+          <Route path="how-it-works" element={<HowItWorksPage />} />
 
           {/* Only ADMINs can reach contact, per your login redirect logic */}
           <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
